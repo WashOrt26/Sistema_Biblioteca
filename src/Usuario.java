@@ -4,7 +4,7 @@ abstract class Usuario {
     protected boolean sancionado;
     protected double multaPendiente;
 
-    public Usuario(int id, String nombre) {
+    public Usuario(int id, String nombre, boolean sancionado, double multaPendiente) {
         this.id = id;
         this.nombre = nombre;
         this.sancionado = false;

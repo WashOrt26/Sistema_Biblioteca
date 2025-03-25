@@ -1,6 +1,7 @@
 class Estudiante extends Usuario {
-    public Estudiante(int id, String nombre) {
-        super(id, nombre);
+
+    public Estudiante(int id, String nombre, boolean sancionado,  double multaPendiente) {
+        super(id, nombre,  sancionado, multaPendiente);
     }
 
     @Override
