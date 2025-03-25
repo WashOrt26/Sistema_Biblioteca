@@ -7,8 +7,8 @@ abstract class Usuario {
     public Usuario(int id, String nombre, boolean sancionado, double multaPendiente) {
         this.id = id;
         this.nombre = nombre;
-        this.sancionado = false;
-        this.multaPendiente = 0.0;
+        this.sancionado = sancionado;
+        this.multaPendiente = multaPendiente;
     }
 
     public abstract void consultarEstado();

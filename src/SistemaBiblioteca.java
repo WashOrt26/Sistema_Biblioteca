@@ -9,8 +9,10 @@ public class SistemaBiblioteca {
         biblioteca.agregarLibro(new Libro(1, "El Principito", "Antoine de Saint-Exupéry"));
         biblioteca.agregarLibro(new Libro(2, "Cien Años de Soledad", "Gabriel García Márquez"));
 
+        Estudiante est = new Estudiante(202, "Maik", true, 1000.0);
+
         biblioteca.agregarUsuario(new Estudiante(101, "Daniel", false, 0.0));
-        biblioteca.agregarUsuario(new Estudiante(202, "Maik", true, 1000.0));
+        biblioteca.agregarUsuario(est);
 
         boolean salir = false;
         while (!salir) {
