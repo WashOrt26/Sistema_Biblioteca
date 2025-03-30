@@ -6,8 +6,8 @@ public class SistemaBiblioteca {
         Biblioteca biblioteca = new Biblioteca();
 
         // Datos de prueba
-        biblioteca.agregarLibro(new Libro(1, "El Principito", "Antoine de Saint-Exupéry"));
-        biblioteca.agregarLibro(new Libro(2, "Cien Años de Soledad", "Gabriel García Márquez"));
+        biblioteca.agregarLibro(new Libro(1, "El Principito", "Antoine de Saint-Exupéry",3));
+        biblioteca.agregarLibro(new Libro(2, "Cien Años de Soledad", "Gabriel García Márquez",1));
 
         Estudiante est = new Estudiante(202, "Maik", true, 1000.0);
 
