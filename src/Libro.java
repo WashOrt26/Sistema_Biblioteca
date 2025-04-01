@@ -10,7 +10,7 @@ class Libro implements Reservable {
         this.titulo = titulo;
         this.autor = autor;
         this.disponible = true;
-        this.ejemplaresDisponibles = cantidadEjemplares; // Inicializa la cantidad de ejemplares
+        this.ejemplaresDisponibles = cantidadEjemplares; 
 
     }
 
@@ -25,15 +25,15 @@ class Libro implements Reservable {
     @Override
     public boolean reservar() {
         if (ejemplaresDisponibles > 0) {
-            ejemplaresDisponibles--; // Reduce el número de ejemplares disponibles
+            ejemplaresDisponibles--; 
             return true;
         }
-        return false; // No se puede reservar si no hay ejemplares
+        return false; 
     }
 
     @Override
     public void liberarLibro() {
-        ejemplaresDisponibles++; // Aumenta el número de ejemplares disponibles
+        ejemplaresDisponibles++; 
     }
 
     public void verDisponibilidad() {

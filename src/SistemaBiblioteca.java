@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import excepciones.*;
 
 public class SistemaBiblioteca {
     public static void main(String[] args) {
@@ -10,7 +11,6 @@ public class SistemaBiblioteca {
         biblioteca.agregarLibro(new Libro(2, "Cien Años de Soledad", "Gabriel García Márquez",1));
 
         Estudiante est = new Estudiante(202, "Maik", true, 1000.0);
-
         biblioteca.agregarUsuario(new Estudiante(101, "Daniel", false, 0.0));
         biblioteca.agregarUsuario(est);
 
@@ -25,58 +25,50 @@ public class SistemaBiblioteca {
             System.out.print("Seleccione una opción: ");
             int opcion = scanner.nextInt();
 
-            switch (opcion) {
-                case 1:
-                    biblioteca.mostrarLibrosDisponibles();
-                    break;
-                case 2:
-                    System.out.print("Ingrese su ID de usuario: ");
-                    int idUsuario = scanner.nextInt();
-                    Usuario usuario = biblioteca.buscarUsuarioPorId(idUsuario);
-                    if (usuario != null) {
-                        if (usuario.puedeReservar()) {
-                            System.out.print("Ingrese el título del libro a reservar: ");
-                            scanner.nextLine();
-                            String titulo = scanner.nextLine();
-                            Libro libro = biblioteca.buscarLibroPorTitulo(titulo);
-                            if (libro != null && libro.isDisponible()) {
-                                libro.reservar();
-                                System.out.println("Reserva exitosa.");
-                            } else {
-                                System.out.println("Libro no disponible o no encontrado.");
-                            }
-                        } else {
-                            System.out.println("No puedes reservar. Tienes una multa pendiente.");
-                        }
-                    } else {
-                        System.out.println("Usuario no encontrado.");
-                    }
-                    break;
-                case 3:
-                    System.out.print("Ingrese su ID de usuario: ");
-                    int idEstado = scanner.nextInt();
-                    Usuario user = biblioteca.buscarUsuarioPorId(idEstado);
-                    if (user != null) {
+            try {
+                switch (opcion) {
+                    case 1:
+                        biblioteca.mostrarLibrosDisponibles();
+                        break;
+                    case 2:
+                        System.out.print("Ingrese su ID de usuario: ");
+                        int idUsuario = scanner.nextInt();
+                        
+                        System.out.print("Ingrese el título del libro a reservar: ");
+                        scanner.nextLine();
+                        String titulo = scanner.nextLine();
+                        
+                        Usuario usuario = biblioteca.buscarUsuarioPorId(idUsuario);
+                        Libro libro = biblioteca.buscarLibroPorTitulo(titulo);
+                        biblioteca.reservarLibro(usuario, libro);
+                        System.out.println("Reserva completada exitosamente");
+                        break;
+                    case 3:
+                        System.out.print("Ingrese su ID de usuario: ");
+                        int idEstado = scanner.nextInt();
+                        Usuario user = biblioteca.buscarUsuarioPorId(idEstado);
                         user.consultarEstado();
-                    } else {
-                        System.out.println("Usuario no encontrado.");
-                    }
-                    break;
-                case 4:
-                    System.out.print("Ingrese su ID de usuario: ");
-                    int idMulta = scanner.nextInt();
-                    Usuario u = biblioteca.buscarUsuarioPorId(idMulta);
-                    if (u != null) {
+                        break;
+                    case 4:
+                        System.out.print("Ingrese su ID de usuario: ");
+                        int idMulta = scanner.nextInt();
+                        Usuario u = biblioteca.buscarUsuarioPorId(idMulta);
                         u.pagarMulta();
-                    } else {
-                        System.out.println("Usuario no encontrado.");
-                    }
-                    break;
-                case 5:
-                    salir = true;
-                    break;
-                default:
-                    System.out.println("Opción inválida.");
+                        break;
+                    case 5:
+                        salir = true;
+                        break;
+                    default:
+                        System.out.println("Opción inválida.");
+                }
+            } catch (UsuarioNoEncontradoException e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (LibroNoDisponibleException e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (MultaPendienteException e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Error inesperado: " + e.getMessage());
             }
         }
 
