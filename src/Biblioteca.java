@@ -57,4 +57,8 @@ class Biblioteca {
 
         libro.reservar();
     }
+
+    public List<Libro> getLibros() {
+        return libros;
+    }
 }

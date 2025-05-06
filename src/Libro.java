@@ -39,4 +39,16 @@ class Libro implements Reservable {
     public void verDisponibilidad() {
         System.out.println(titulo + " - " + (ejemplaresDisponibles > 0 ? "Disponible (" + ejemplaresDisponibles + " ejemplares)" : "No disponible"));
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public int getCantidadDisponible() {
+        return ejemplaresDisponibles;
+    }
 }
