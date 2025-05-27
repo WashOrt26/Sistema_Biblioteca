@@ -3,6 +3,7 @@ import excepciones.*;
 
 public class SistemaBiblioteca {
     public static void main(String[] args) {
+        ConexionBD.conectar();
         Scanner scanner = new Scanner(System.in);
         Biblioteca biblioteca = new Biblioteca();
 
