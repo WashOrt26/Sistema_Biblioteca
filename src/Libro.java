@@ -1,21 +1,28 @@
-class Libro implements Reservable {
+public class Libro implements Reservable {
     private int id;
     private String titulo;
     private String autor;
     private boolean disponible;
     private int ejemplaresDisponibles;
 
+    public Libro() {} // Constructor vacío (útil para cargar desde BD)
+
     public Libro(int id, String titulo, String autor, int cantidadEjemplares) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
         this.disponible = true;
-        this.ejemplaresDisponibles = cantidadEjemplares; 
-
+        this.ejemplaresDisponibles = cantidadEjemplares;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; } // nuevo
+
+    public String getTitulo() { return titulo; }
+    public String getAutor() { return autor; }
+
+    public int getCantidadDisponible() {
+        return ejemplaresDisponibles;
     }
 
     public boolean isDisponible() {
@@ -25,30 +32,20 @@ class Libro implements Reservable {
     @Override
     public boolean reservar() {
         if (ejemplaresDisponibles > 0) {
-            ejemplaresDisponibles--; 
+            ejemplaresDisponibles--;
             return true;
         }
-        return false; 
+        return false;
     }
 
     @Override
     public void liberarLibro() {
-        ejemplaresDisponibles++; 
+        ejemplaresDisponibles++;
     }
 
     public void verDisponibilidad() {
-        System.out.println(titulo + " - " + (ejemplaresDisponibles > 0 ? "Disponible (" + ejemplaresDisponibles + " ejemplares)" : "No disponible"));
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-    public int getCantidadDisponible() {
-        return ejemplaresDisponibles;
+        System.out.println(titulo + " - " +
+                (ejemplaresDisponibles > 0 ?
+                        "Disponible (" + ejemplaresDisponibles + " ejemplares)" : "No disponible"));
     }
 }

@@ -8,15 +8,15 @@ class Biblioteca {
 
     public Biblioteca() {
         libros = new ArrayList<>();
-        usuarios = new ArrayList<>();
     }
 
     public void agregarLibro(Libro libro) {
         libros.add(libro);
+        LibroDAO.guardarLibro(libro);
     }
 
     public void agregarUsuario(Usuario usuario) {
-        usuarios.add(usuario);
+        UsuarioDAO.guardarUsuario(usuario);
     }
 
     public void mostrarLibrosDisponibles() {
@@ -38,27 +38,35 @@ class Biblioteca {
     }
 
     public Usuario buscarUsuarioPorId(int id) throws UsuarioNoEncontradoException {
-        for (Usuario usuario : usuarios) {
-            if (usuario.id == id) {
-                return usuario;
-            }
+        Usuario usuario = UsuarioDAO.buscarUsuarioPorId(id);
+        if (usuario == null) {
+            throw new UsuarioNoEncontradoException("Usuario no encontrado con ID: " + id);
         }
-        throw new UsuarioNoEncontradoException("Usuario no encontrado con ID: " + id);
+        return usuario;
     }
 
     public void reservarLibro(Usuario usuario, Libro libro) throws LibroNoDisponibleException, MultaPendienteException {
         if (!usuario.puedeReservar()) {
             throw new MultaPendienteException("El usuario tiene una multa pendiente");
         }
-        
+
         if (!libro.isDisponible()) {
             throw new LibroNoDisponibleException("El libro no está disponible");
         }
 
         libro.reservar();
+        UsuarioDAO.actualizarUsuario(usuario); // si quieres guardar estado de usuario después
     }
 
     public List<Libro> getLibros() {
         return libros;
+    }
+
+    public void cargarLibrosDesdeBD() {
+        libros = LibroDAO.obtenerLibros();
+    }
+
+    public void cargarUsuariosDesdeBD() {
+        usuarios = UsuarioDAO.obtenerTodosLosUsuarios();
     }
 }

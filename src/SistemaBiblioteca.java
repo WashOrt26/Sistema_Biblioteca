@@ -7,13 +7,9 @@ public class SistemaBiblioteca {
         Scanner scanner = new Scanner(System.in);
         Biblioteca biblioteca = new Biblioteca();
 
-        // Datos de prueba
-        biblioteca.agregarLibro(new Libro(1, "El Principito", "Antoine de Saint-Exupéry",3));
-        biblioteca.agregarLibro(new Libro(2, "Cien Años de Soledad", "Gabriel García Márquez",1));
-
-        Estudiante est = new Estudiante(202, "Maik", true, 1000.0);
-        biblioteca.agregarUsuario(new Estudiante(101, "Daniel", false, 0.0));
-        biblioteca.agregarUsuario(est);
+        // Cargar datos desde la base de datos
+        biblioteca.cargarLibrosDesdeBD();
+        biblioteca.cargarUsuariosDesdeBD();
 
         boolean salir = false;
         while (!salir) {
@@ -22,7 +18,8 @@ public class SistemaBiblioteca {
             System.out.println("2. Reservar libro");
             System.out.println("3. Consultar estado del usuario");
             System.out.println("4. Pagar multa");
-            System.out.println("5. Salir");
+            System.out.println("5. Agregar nuevo libro");
+            System.out.println("6. Salir");
             System.out.print("Seleccione una opción: ");
             int opcion = scanner.nextInt();
 
@@ -34,11 +31,10 @@ public class SistemaBiblioteca {
                     case 2:
                         System.out.print("Ingrese su ID de usuario: ");
                         int idUsuario = scanner.nextInt();
-                        
+                        scanner.nextLine(); // limpiar buffer
                         System.out.print("Ingrese el título del libro a reservar: ");
-                        scanner.nextLine();
                         String titulo = scanner.nextLine();
-                        
+
                         Usuario usuario = biblioteca.buscarUsuarioPorId(idUsuario);
                         Libro libro = biblioteca.buscarLibroPorTitulo(titulo);
                         biblioteca.reservarLibro(usuario, libro);
@@ -55,8 +51,21 @@ public class SistemaBiblioteca {
                         int idMulta = scanner.nextInt();
                         Usuario u = biblioteca.buscarUsuarioPorId(idMulta);
                         u.pagarMulta();
+                        UsuarioDAO.actualizarUsuario(u); // Guardar cambios en BD
                         break;
                     case 5:
+                        scanner.nextLine(); // limpiar buffer
+                        System.out.print("Ingrese el título del nuevo libro: ");
+                        String nuevoTitulo = scanner.nextLine();
+                        System.out.print("Ingrese el autor: ");
+                        String autor = scanner.nextLine();
+                        System.out.print("Cantidad de ejemplares: ");
+                        int cantidad = scanner.nextInt();
+                        Libro nuevoLibro = new Libro(0, nuevoTitulo, autor, cantidad);
+                        biblioteca.agregarLibro(nuevoLibro);
+                        System.out.println("Libro agregado correctamente.");
+                        break;
+                    case 6:
                         salir = true;
                         break;
                     default:
