@@ -1,30 +1,52 @@
+import java.util.ArrayList;
+import java.util.List;
+
 abstract class Usuario {
-    protected int id;
-    protected String nombre;
-    protected boolean sancionado;
-    protected double multaPendiente;
+    public int id;
+    public String nombre;
+    public boolean sancionado;
+    public double multaPendiente;
+    protected List<Libro> librosReservados;
 
     public Usuario(int id, String nombre, boolean sancionado, double multaPendiente) {
         this.id = id;
         this.nombre = nombre;
         this.sancionado = sancionado;
         this.multaPendiente = multaPendiente;
+        this.librosReservados = new ArrayList<>();
     }
 
     public abstract void consultarEstado();
 
     public void pagarMulta() {
         if (multaPendiente > 0) {
-            System.out.println("Multa pagada: $" + multaPendiente);
             multaPendiente = 0;
             sancionado = false;
-        } else {
-            System.out.println("No tienes multas pendientes.");
+            
+            // Actualizar en la base de datos
+            UsuarioDAO.actualizarUsuario(this);
         }
     }
 
     public boolean puedeReservar() {
         return !sancionado;
+    }
+
+    // Métodos para gestionar libros reservados
+    public void agregarLibroReservado(Libro libro) {
+        librosReservados.add(libro);
+    }
+
+    public void quitarLibroReservado(Libro libro) {
+        librosReservados.remove(libro);
+    }
+
+    public List<Libro> getLibrosReservados() {
+        return librosReservados;
+    }
+
+    public boolean tieneLibrosReservados() {
+        return !librosReservados.isEmpty();
     }
 }
 

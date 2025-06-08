@@ -48,4 +48,17 @@ public class Libro implements Reservable {
                 (ejemplaresDisponibles > 0 ?
                         "Disponible (" + ejemplaresDisponibles + " ejemplares)" : "No disponible"));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Libro libro = (Libro) obj;
+        return id == libro.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }
 }

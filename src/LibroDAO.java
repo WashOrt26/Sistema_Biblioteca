@@ -3,9 +3,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LibroDAO {
-    private final String URL = "jdbc:mysql://localhost:3306/biblioteca";
-    private final String USER = "root";
-    private final String PASSWORD = "Base";
 
     // Insertar libro
     public static void guardarLibro(Libro libro) {
@@ -13,13 +10,14 @@ public class LibroDAO {
 
         try (Connection conn = ConexionBD.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setString(1, libro.getTitulo());
             stmt.setString(2, libro.getAutor());
             stmt.setInt(3, libro.getCantidadDisponible());
             stmt.executeUpdate();
-            System.out.println("Libro guardado: " + libro.getTitulo());
+
         } catch (SQLException e) {
-            System.out.println("Error al guardar libro: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -48,26 +46,33 @@ public class LibroDAO {
 
         return libros;
     }
+
     // Actualizar ejemplares disponibles
-    public void actualizarEjemplares(int idLibro, int nuevosEjemplares) {
+    public static void actualizarEjemplares(int idLibro, int nuevosEjemplares) {
         String sql = "UPDATE libros SET ejemplares_disponibles = ? WHERE id = ?";
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+
+        try (Connection conn = ConexionBD.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, nuevosEjemplares);
             stmt.setInt(2, idLibro);
             stmt.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     // Eliminar un libro
-    public void eliminarLibro(int idLibro) {
+    public static void eliminarLibro(int idLibro) {
         String sql = "DELETE FROM libros WHERE id = ?";
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+
+        try (Connection conn = ConexionBD.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, idLibro);
             stmt.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

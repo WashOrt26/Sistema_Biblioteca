@@ -55,7 +55,45 @@ class Biblioteca {
         }
 
         libro.reservar();
-        UsuarioDAO.actualizarUsuario(usuario); // si quieres guardar estado de usuario después
+        ReservaDAO.crearReserva(usuario.id, libro.getId());
+        usuario.agregarLibroReservado(libro);
+        UsuarioDAO.actualizarUsuario(usuario);
+    }
+
+    public void devolverLibro(Usuario usuario, Libro libro) throws Exception {
+        // Verificar que el usuario realmente tenga este libro reservado
+        // Usar una comparación más robusta basada en ID
+        boolean tieneLibro = false;
+        for (Libro libroReservado : usuario.getLibrosReservados()) {
+            if (libroReservado.getId() == libro.getId()) {
+                tieneLibro = true;
+                break;
+            }
+        }
+        
+        if (!tieneLibro) {
+            throw new Exception("El usuario no tiene este libro reservado");
+        }
+
+        // Liberar el libro (aumentar ejemplares disponibles)
+        libro.liberarLibro();
+        
+        // Eliminar la reserva de la base de datos
+        ReservaDAO.eliminarReserva(usuario.id, libro.getId());
+        
+        // Quitar de la lista en memoria (usar el libro de la lista del usuario)
+        for (Libro libroReservado : usuario.getLibrosReservados()) {
+            if (libroReservado.getId() == libro.getId()) {
+                usuario.quitarLibroReservado(libroReservado);
+                break;
+            }
+        }
+        
+        // Actualizar el libro en la base de datos
+        LibroDAO.actualizarEjemplares(libro.getId(), libro.getCantidadDisponible());
+        
+        // Actualizar el usuario en la base de datos
+        UsuarioDAO.actualizarUsuario(usuario);
     }
 
     public List<Libro> getLibros() {
